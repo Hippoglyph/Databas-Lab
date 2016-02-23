@@ -1,0 +1,10 @@
+﻿DROP TABLE Problem;
+DROP TABLE SetProblems;
+DROP TABLE Score;
+DROP TABLE Group_;
+DROP TABLE Recitation;
+DROP TABLE takes;
+DROP TABLE Course;
+DROP TABLE Student;
+DROP TABLE Teacher;
+DROP TABLE Person;
