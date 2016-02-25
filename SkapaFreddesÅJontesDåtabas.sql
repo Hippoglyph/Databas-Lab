@@ -6,13 +6,13 @@
 
 CREATE TABLE Student
 (	ssid VARCHAR(20),
-	studentid VARCHAR(20),
+	studentid VARCHAR(20) UNIQUE,
 	CONSTRAINT pk_StudentID PRIMARY KEY (ssid)
 );
 
 CREATE TABLE Teacher
 (	ssid VARCHAR(20),
-	teacherid VARCHAR(20),
+	teacherid VARCHAR(20) UNIQUE,
 	CONSTRAINT pk_TeacherID PRIMARY KEY (ssid)
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE Group_
 	teacherid VARCHAR(20),
 	CONSTRAINT pk_GroupID PRIMARY KEY (cid, rName, name),
 	--FOREIGN KEY (rName) REFERENCES Recitation(name),
-	--FOREIGN KEY (teacherid) REFERENCES Teacher(teacherid),
+	FOREIGN KEY (teacherid) REFERENCES Teacher(teacherid),
 	--FOREIGN KEY (cid) REFERENCES Course(cid)
 );
 
@@ -79,11 +79,11 @@ CREATE TABLE Score
 	gName VARCHAR(35),
 	studentid VARCHAR(20),
 	description_ VARCHAR(256),
-	CONSTRAINT pk_ScoreID PRIMARY KEY (cid, rName, gName, studentid),
+	CONSTRAINT pk_ScoreID PRIMARY KEY (cid, rName, studentid),
 	--FOREIGN KEY (cid) REFERENCES Course(cid),
 	--FOREIGN KEY (rName) REFERENCES Recitation(name),
 	--FOREIGN KEY (gName) REFERENCES Group_(name),
-	--FOREIGN KEY (studentid) REFERENCES Student(studentid)
+	FOREIGN KEY (studentid) REFERENCES Student(studentid)
 );
 
 BEGIN;
