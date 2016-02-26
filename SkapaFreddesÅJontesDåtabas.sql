@@ -41,7 +41,7 @@ CREATE TABLE SetProblems
 (	cid VARCHAR(20),
 	rName VARCHAR(35),
 	name VARCHAR(35),
-	noReq SMALLINT,
+	noReq INT,
 	description_ VARCHAR(256),
 	CONSTRAINT pk_SetProblemID PRIMARY KEY (cid, rName, name),
 	--FOREIGN KEY (rName) REFERENCES Recitation(name),

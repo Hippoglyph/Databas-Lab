@@ -16,22 +16,29 @@ namespace RecitationRapportering
         public RecitationReport()
         {
             InitializeComponent();
-            logic = new Logic("RecitationDatabase");
+            locationLabel.Text = "";
+            logic = new Logic("dbZero", courseBox, recitationBox,groupBox, problemBox);
         }
 
         private void Submit(object sender, EventArgs e)
         {
-            logic.updateCourse(idText.Text, courseBox);
+            logic.updateCourse(idText.Text);
         }
 
         private void courseBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            logic.updateRecitation(courseBox, recitationBox);
+            logic.updateRecitation();
         }
 
         private void recitationBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            logic.updateGroup(recitationBox, courseBox, groupBox);
+            logic.updateGroup();
+            logic.updateProblembox();
+        }
+
+        private void groupBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            logic.updateLocation(locationLabel);
         }
     }
 }
