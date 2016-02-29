@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecitationReport));
             this.idText = new System.Windows.Forms.TextBox();
             this.courseBox = new System.Windows.Forms.ListBox();
             this.recitationBox = new System.Windows.Forms.ListBox();
@@ -39,6 +40,7 @@
             this.GroupLabel = new System.Windows.Forms.Label();
             this.problemBox = new System.Windows.Forms.FlowLayoutPanel();
             this.locationLabel = new System.Windows.Forms.Label();
+            this.buttonSubmit = new System.Windows.Forms.Button();
             this.selectionPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,6 +141,8 @@
             // problemBox
             // 
             this.problemBox.AutoScroll = true;
+            this.problemBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.problemBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.problemBox.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.problemBox.Location = new System.Drawing.Point(179, 33);
             this.problemBox.Name = "problemBox";
@@ -156,14 +160,27 @@
             this.locationLabel.TabIndex = 8;
             this.locationLabel.Text = "Location";
             // 
+            // buttonSubmit
+            // 
+            this.buttonSubmit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSubmit.Location = new System.Drawing.Point(579, 439);
+            this.buttonSubmit.Name = "buttonSubmit";
+            this.buttonSubmit.Size = new System.Drawing.Size(117, 39);
+            this.buttonSubmit.TabIndex = 9;
+            this.buttonSubmit.Text = "Submit";
+            this.buttonSubmit.UseVisualStyleBackColor = true;
+            this.buttonSubmit.Click += new System.EventHandler(this.buttonSubmit_Click);
+            // 
             // RecitationReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(734, 451);
+            this.ClientSize = new System.Drawing.Size(734, 494);
+            this.Controls.Add(this.buttonSubmit);
             this.Controls.Add(this.locationLabel);
             this.Controls.Add(this.problemBox);
             this.Controls.Add(this.selectionPanel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "RecitationReport";
             this.Text = "Recitation report system";
@@ -187,6 +204,7 @@
         private System.Windows.Forms.Label GroupLabel;
         private System.Windows.Forms.FlowLayoutPanel problemBox;
         private System.Windows.Forms.Label locationLabel;
+        private System.Windows.Forms.Button buttonSubmit;
     }
 }
 

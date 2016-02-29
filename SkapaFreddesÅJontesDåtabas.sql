@@ -78,8 +78,24 @@ CREATE TABLE Score
 	rName VARCHAR(35),
 	gName VARCHAR(35),
 	studentid VARCHAR(20),
-	description_ VARCHAR(256),
-	CONSTRAINT pk_ScoreID PRIMARY KEY (cid, rName, studentid),
+	points INT,
+	CONSTRAINT pk_ScoreID PRIMARY KEY (cid, rName, gName, studentid),
+	--FOREIGN KEY (cid) REFERENCES Course(cid),
+	--FOREIGN KEY (rName) REFERENCES Recitation(name),
+	--FOREIGN KEY (gName) REFERENCES Group_(name),
+	FOREIGN KEY (studentid) REFERENCES Student(studentid)
+);
+
+CREATE TABLE hasSolved
+(	cid VARCHAR(20),
+	rName VARCHAR(35),
+	setName VARCHAR(35),
+	studentid VARCHAR(20),
+	pName VARCHAR(35),
+	gName VARCHAR(35),
+	called Bit,
+	accepted Bit,
+	CONSTRAINT pk_hasSolvedID PRIMARY KEY (cid, rName, studentid, setName, pName, gName),
 	--FOREIGN KEY (cid) REFERENCES Course(cid),
 	--FOREIGN KEY (rName) REFERENCES Recitation(name),
 	--FOREIGN KEY (gName) REFERENCES Group_(name),

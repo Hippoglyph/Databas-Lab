@@ -15,20 +15,23 @@ namespace RecitationRapportering
         static SqlConnection connect;
         static SqlCommand command;
 
+        private TextBox idBox;
         private ListBox courseBox;
         private ListBox recitationBox;
         private ListBox groupBox;
         private FlowLayoutPanel problemBox;
-        public Logic(String databaseName, ListBox courseBox, ListBox recitationBox, ListBox groupBox, FlowLayoutPanel problemBox)
+        private List<CheckedListBox> checkLists;
+        public Logic(String databaseName, ListBox courseBox, ListBox recitationBox, ListBox groupBox, FlowLayoutPanel problemBox, TextBox idBox)
         {
-            
             connect = new SqlConnection("Data Source = (LocalDB)\\MSSQLLocalDB;" +
                 "AttachDbFilename = " + Application.StartupPath + "\\"+ databaseName +".mdf;" +
                 "Integrated Security = True; Connect Timeout = 30");
+            this.idBox = idBox;
             this.courseBox = courseBox;
             this.recitationBox = recitationBox;
             this.groupBox = groupBox;
             this.problemBox = problemBox;
+            checkLists = new List<CheckedListBox>();
         }
 
         private struct Data
@@ -36,22 +39,21 @@ namespace RecitationRapportering
             public String Value { get; set; }
             public String Text { get; set; }
         }
+        private struct ProblemValues
+        {
+            public String problemName { get; set; }
+            public String setName { get; set; }
+            public String Text { get; set; }
+        }
         public void updateCourse(String searchText)
         {
             List<List<String>> s = commitCommand("SELECT Course.cid, Course.name FROM takes JOIN Course ON takes.cid = Course.cid WHERE studentid = '" + searchText + "';");
             courseBox.DataSource = null;
             List<Data> data = new List<Data>();
-            if (s.Count == 2)
-            {
-                for (int i = 0; i < s[0].Count; i++)
-                {
-                    data.Add(new Data() { Value = s[0][i], Text = s[1][i] });
-                }
-                courseBox.DisplayMember = "Text";
-                courseBox.DataSource = data;
-            }
-            else
-                Console.WriteLine("updateCourse Wrong amount of colums");
+            for (int i = 0; i < s[0].Count; i++)
+                data.Add(new Data() { Value = s[0][i], Text = s[1][i] });
+            courseBox.DisplayMember = "Text";
+            courseBox.DataSource = data;
         }
 
         public void updateRecitation()
@@ -62,17 +64,10 @@ namespace RecitationRapportering
             List<List<String>> s = commitCommand("SELECT Recitation.name FROM Recitation WHERE Recitation.cid = '" +
                 ((Data)courseBox.SelectedValue).Value + "';");
             List<Data> data = new List<Data>();
-            if (s.Count == 1)
-            {
-                for (int i = 0; i < s[0].Count; i++)
-                {
-                    data.Add(new Data() { Value = s[0][i], Text = s[0][i] });
-                }
-                recitationBox.DisplayMember = "Text";
-                recitationBox.DataSource = data;
-            }
-            else
-                Console.WriteLine("updateRecitation Wrong amount of colums");
+            for (int i = 0; i < s[0].Count; i++)
+                data.Add(new Data() { Value = s[0][i], Text = s[0][i] });
+            recitationBox.DisplayMember = "Text";
+            recitationBox.DataSource = data;
         }
 
         public void updateGroup()
@@ -82,19 +77,11 @@ namespace RecitationRapportering
                 return;
             List<List<String>> s = commitCommand("SELECT group_.name FROM group_ WHERE group_.cid = '" + ((Data)courseBox.SelectedValue).Value +
                 "' AND group_.rname = '" + ((Data)recitationBox.SelectedValue).Value + "';");
-            
             List<Data> data = new List<Data>();
-            if (s.Count == 1)
-            {
-                for (int i = 0; i < s[0].Count; i++)
-                {
-                    data.Add(new Data() { Value = s[0][i], Text = s[0][i] });
-                }
-                groupBox.DisplayMember = "Text";
-                groupBox.DataSource = data;
-            }
-            else
-                Console.WriteLine("updateGroup Wrong amount of colums");
+            for (int i = 0; i < s[0].Count; i++)
+                data.Add(new Data() { Value = s[0][i], Text = s[0][i] });
+            groupBox.DisplayMember = "Text";
+            groupBox.DataSource = data;
         }
 
         public void updateLocation(Label locationLabel)
@@ -111,20 +98,14 @@ namespace RecitationRapportering
         public void updateProblembox()
         {
             problemBox.Controls.Clear();
+            checkLists.Clear();
             if (recitationBox.SelectedValue == null || courseBox.SelectedValue == null)
                 return;
-            List<List<String>> s = commitCommand("SELECT setProblems.name, setProblems.noReq, setProblems.description_ FROM setProblems WHERE setProblems.cid = '" +
+            List<List<String>> s = commitCommand("SELECT setProblems.name, setProblems.description_ FROM setProblems WHERE setProblems.cid = '" +
                 ((Data)courseBox.SelectedValue).Value + "' AND setProblems.rname = '" +
                 ((Data)recitationBox.SelectedValue).Value + "';");
-            if (s.Count == 3)
-            {
-                for (int i = 0; i < s[0].Count; i++)
-                {
-                    insertSetProblem(s[0][i], s[2][i]);
-                }
-            }
-            else
-                Console.WriteLine("updateProblembox Wrong amount of colums");
+            for (int i = 0; i < s[0].Count; i++)
+                insertSetProblem(s[0][i], s[1][i]);
         }
 
         private void insertSetProblem(String name, String description)
@@ -138,6 +119,8 @@ namespace RecitationRapportering
             problemCheckBox.Width = problemBox.Width-50;
             problemCheckBox.HorizontalScrollbar = true;
             problemBox.Controls.Add(problemCheckBox);
+            problemCheckBox.DisplayMember = "Text";
+            checkLists.Add(problemCheckBox);
             insertProblems(name, problemCheckBox);
         }
 
@@ -146,16 +129,26 @@ namespace RecitationRapportering
             List<List<String>> s = commitCommand("SELECT problem.name, problem.description_ FROM problem WHERE problem.cid = '"+
                 ((Data)courseBox.SelectedValue).Value + "' AND problem.rname = '" + ((Data)recitationBox.SelectedValue).Value +
                 "' AND problem.setName = '"+ setName +"'; ");
-            if (s.Count == 2)
-            {
-                for (int i = 0; i < s[0].Count; i++)
-                {
-                    checkbox.Items.Add(s[0][i] + ". " + s[1][i]);
-                }
-            }
-            else
-                Console.WriteLine("updateProblem Wrong amount of colums");
+            for (int i = 0; i < s[0].Count; i++)
+                checkbox.Items.Add(new ProblemValues { problemName = s[0][i] , setName = setName, Text = s[0][i] + ". " + s[1][i] });
+        }
 
+        public void submitForm()
+        {
+            commitCommand("DELETE FROM hasSolved WHERE studentid = '" + idBox.Text + "' AND rName = '" + ((Data)recitationBox.SelectedValue).Value
+                + "' AND gName = '" + ((Data)groupBox.SelectedValue).Value + "' AND cid = '" + ((Data)courseBox.SelectedValue).Value + "';");
+            foreach(CheckedListBox clb in checkLists)
+            {
+                foreach(ProblemValues data in clb.CheckedItems)
+                    commitCommand(buildUpdateQuery(data));
+            }
+        }
+
+        private string buildUpdateQuery(ProblemValues data)
+        {
+            return "INSERT INTO hasSolved(cid, rName, setName, studentid, pName, gName, called, accepted) " + 
+                   "VALUES('"+ ((Data)courseBox.SelectedValue).Value + "', '" + ((Data)recitationBox.SelectedValue).Value + "', '" + data.setName + "', '" +
+                   idBox.Text + "', '" + data.problemName + "', '" + ((Data)groupBox.SelectedValue).Value + "', 0, 0);";
         }
 
         private List<List<String>> commitCommand(String code)

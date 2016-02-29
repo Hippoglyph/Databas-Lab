@@ -1,4 +1,5 @@
-﻿DROP TABLE Problem;
+﻿DROP TABLE hasSolved;
+DROP TABLE Problem;
 DROP TABLE SetProblems;
 DROP TABLE Score;
 DROP TABLE Group_;

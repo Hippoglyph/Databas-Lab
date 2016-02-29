@@ -17,7 +17,7 @@ namespace RecitationRapportering
         {
             InitializeComponent();
             locationLabel.Text = "";
-            logic = new Logic("dbZero", courseBox, recitationBox,groupBox, problemBox);
+            logic = new Logic("dbZero", courseBox, recitationBox,groupBox, problemBox, idText);
         }
 
         private void Submit(object sender, EventArgs e)
@@ -39,6 +39,11 @@ namespace RecitationRapportering
         private void groupBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             logic.updateLocation(locationLabel);
+        }
+
+        private void buttonSubmit_Click(object sender, EventArgs e)
+        {
+            logic.submitForm();
         }
     }
 }

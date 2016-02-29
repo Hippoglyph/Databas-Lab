@@ -1,1 +1,1 @@
-﻿SELECT * FROM SetProblems;
+﻿INSERT INTO hasSolved(cid, rName, setName, studentid, pName, gName, called, accepted) VALUES('c1', 'rec 1', 'problem 1', 's1', 'b', 'A', 0, 0);
